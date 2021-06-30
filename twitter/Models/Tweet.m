@@ -33,6 +33,7 @@
         self.favorited = [dictionary[@"favorited"] boolValue];
         self.retweetCount = [dictionary [@"retweet_count"] intValue];
         self.retweeted = [dictionary[@"retweeted"] boolValue];
+        self.replyCount = [dictionary[@"reply"] intValue];
         
         //format createdAt data string
         NSString *createdAtOriginalString = dictionary [@"created_at"];

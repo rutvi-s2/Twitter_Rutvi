@@ -85,10 +85,26 @@
     cell.tweet_date.text = tweet.createdAtString;
     cell.tweet_text.text = tweet.text;
     
+    
     cell.user_profile.image = nil;
     NSString *URLString = tweet.user.profilePicture;
     NSURL *url = [NSURL URLWithString:URLString];
     [cell.user_profile setImageWithURL:url];
+    
+    if (cell.tweet.favorited == YES){
+        [cell.favor_button setImage:[UIImage imageNamed:@"favor-icon-red"] forState:UIControlStateNormal];
+    }else{
+        [cell.favor_button setImage:[UIImage imageNamed:@"favor-icon"] forState:UIControlStateNormal];
+    }
+    if(cell.tweet.retweeted == YES){
+        [cell.retweet_button setImage:[UIImage imageNamed:@"retweet-icon-green"] forState:UIControlStateNormal];
+    }else{
+        [cell.retweet_button setImage:[UIImage imageNamed:@"retweet-icon"] forState:UIControlStateNormal];
+    }
+    
+    cell.tweet_replies.text = [NSString stringWithFormat:@"%d", tweet.replyCount];
+    cell.tweet_likes.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
+    cell.tweet_retweets.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
     
     return cell;
 }
@@ -96,7 +112,8 @@
 - (void) didTweet:(Tweet *)tweet{
     [self.arrayOfTweets addObject:tweet];
     NSLog(@"%@", @"added");
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
+    [self getTimeline];
 }
 /*
 #pragma mark - Navigation

@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *reply_button;
 @property (weak, nonatomic) IBOutlet UIButton *retweet_button;
 @property (weak, nonatomic) IBOutlet UIButton *favor_button;
-@property (weak, nonatomic) IBOutlet UIButton *message_button;
 @property (strong, nonatomic) Tweet *tweet;
 @end
 

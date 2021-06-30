@@ -113,8 +113,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="146" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GWu-h2-iTy">
-                                                    <rect key="frame" x="103" y="112" width="28" height="46"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GWu-h2-iTy">
+                                                    <rect key="frame" x="120.5" y="112" width="10.5" height="46"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -126,12 +126,15 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UJs-zV-XgI">
-                                                    <rect key="frame" x="73" y="120" width="30" height="30"/>
+                                                    <rect key="frame" x="90.5" y="120" width="30" height="30"/>
                                                     <state key="normal" image="reply-icon"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4a-GT-HXF">
                                                     <rect key="frame" x="149" y="120" width="30" height="30"/>
                                                     <state key="normal" image="retweet-icon"/>
+                                                    <connections>
+                                                        <action selector="didTapRetweet:" destination="Oyz-03-Wu8" eventType="touchUpInside" id="bjA-OR-uH3"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="380" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o1h-Lb-4eA">
                                                     <rect key="frame" x="178" y="125" width="31" height="21"/>
@@ -139,10 +142,6 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="omF-Pv-Zdk">
-                                                    <rect key="frame" x="329" y="120" width="30" height="30"/>
-                                                    <state key="normal" image="message-icon"/>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfx-zz-duS">
                                                     <rect key="frame" x="95" y="38" width="254" height="72"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -152,6 +151,9 @@
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VLA-eJ-GOX">
                                                     <rect key="frame" x="226" y="118" width="30" height="30"/>
                                                     <state key="normal" image="favor-icon"/>
+                                                    <connections>
+                                                        <action selector="didTapFavorite:" destination="Oyz-03-Wu8" eventType="touchUpInside" id="Faj-f4-FVK"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -159,7 +161,6 @@
                                                 <constraint firstItem="wfx-zz-duS" firstAttribute="top" secondItem="BWp-Ls-dxX" secondAttribute="bottom" constant="8" id="2yk-1C-N3w"/>
                                                 <constraint firstItem="lOr-xp-0wn" firstAttribute="top" secondItem="xbN-LN-qbB" secondAttribute="top" constant="7" id="3Lo-sH-0LZ"/>
                                                 <constraint firstItem="v4a-GT-HXF" firstAttribute="leading" secondItem="xbN-LN-qbB" secondAttribute="leading" constant="149" id="49M-EE-9ph"/>
-                                                <constraint firstItem="VLA-eJ-GOX" firstAttribute="top" secondItem="omF-Pv-Zdk" secondAttribute="top" constant="-2" id="8Id-xO-6Jt"/>
                                                 <constraint firstItem="VaG-aW-2eE" firstAttribute="top" secondItem="xbN-LN-qbB" secondAttribute="top" constant="7" id="Aep-eV-xGI"/>
                                                 <constraint firstItem="wfx-zz-duS" firstAttribute="leading" secondItem="Jfm-W6-Ish" secondAttribute="trailing" constant="16" id="Anr-YH-pzY"/>
                                                 <constraint firstItem="UJs-zV-XgI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wfx-zz-duS" secondAttribute="bottom" constant="5" id="E71-ne-x0I"/>
@@ -182,7 +183,6 @@
                                                 <constraint firstItem="lOr-xp-0wn" firstAttribute="leading" secondItem="VaG-aW-2eE" secondAttribute="trailing" constant="12" id="jvd-My-VKy"/>
                                                 <constraint firstAttribute="trailing" secondItem="lOr-xp-0wn" secondAttribute="trailing" constant="6" id="kCH-CW-Y5b"/>
                                                 <constraint firstItem="v4a-GT-HXF" firstAttribute="leading" secondItem="GWu-h2-iTy" secondAttribute="trailing" constant="18" id="oUl-qj-f8g"/>
-                                                <constraint firstItem="omF-Pv-Zdk" firstAttribute="leading" secondItem="ncf-tq-6rb" secondAttribute="trailing" constant="27" id="qmr-Tn-rem"/>
                                                 <constraint firstItem="VaG-aW-2eE" firstAttribute="leading" secondItem="BWp-Ls-dxX" secondAttribute="trailing" constant="8" id="rHP-aH-JH6"/>
                                                 <constraint firstItem="VLA-eJ-GOX" firstAttribute="leading" secondItem="o1h-Lb-4eA" secondAttribute="trailing" constant="17" id="ux3-EY-bNm"/>
                                                 <constraint firstItem="ncf-tq-6rb" firstAttribute="top" secondItem="wfx-zz-duS" secondAttribute="bottom" constant="14" id="vG8-vo-evp"/>
@@ -192,7 +192,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="favor_button" destination="VLA-eJ-GOX" id="QMP-c5-nJf"/>
-                                            <outlet property="message_button" destination="omF-Pv-Zdk" id="t9M-BE-wSe"/>
                                             <outlet property="reply_button" destination="UJs-zV-XgI" id="zJj-Gc-MTS"/>
                                             <outlet property="retweet_button" destination="v4a-GT-HXF" id="RS0-74-xEr"/>
                                             <outlet property="tweet_date" destination="lOr-xp-0wn" id="RuL-Xb-k55"/>
@@ -320,7 +319,6 @@
         <image name="close-icon" width="26" height="24"/>
         <image name="edit-icon" width="30" height="27"/>
         <image name="favor-icon" width="30" height="30"/>
-        <image name="message-icon" width="30" height="30"/>
         <image name="reply-icon" width="30" height="30"/>
         <image name="retweet-icon" width="30" height="30"/>
         <systemColor name="labelColor">
