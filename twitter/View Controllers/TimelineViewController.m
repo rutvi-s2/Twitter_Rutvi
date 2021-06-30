@@ -10,27 +10,50 @@
 #import "APIManager.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "Tweet.h"
+#import "TweetCell.h"
+#import "UIImageView+AFNetworking.h"
 
-@interface TimelineViewController ()
+@interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
+@property (strong, nonatomic) NSMutableArray *arrayOfTweets;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
 @implementation TimelineViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self getTimeline];
+
+    self.refreshControl = [[UIRefreshControl alloc] init];
     
+    [self.refreshControl addTarget:self action:@selector(getTimeline) forControlEvents:UIControlEventValueChanged];
+    
+    [self.tableView insertSubview:self.refreshControl atIndex: 0];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+}
+
+-(void)getTimeline{
     // Get timeline
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
+            self.arrayOfTweets = (NSMutableArray *)tweets;
+//            NSLog(@"%lu", self.arrayOfTweets.count);
+            NSLog(@"%lu", tweets.count);
             NSLog(@"😎😎😎 Successfully loaded home timeline");
-            for (NSDictionary *dictionary in tweets) {
-                NSString *text = dictionary[@"text"];
-                NSLog(@"%@", text);
-            }
+//            for (Tweet *dictionary in tweets) {
+//                NSString *text = dictionary.text;
+//                NSLog(@"%@", text);
+//            }
+            [self.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
+        [self.refreshControl endRefreshing];
     }];
 }
 
@@ -45,6 +68,30 @@
     appDelegate.window.rootViewController = loginViewController;
     [[APIManager shared] logout];
 }
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSLog(@"%lu", self.arrayOfTweets.count);
+    return self.arrayOfTweets.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
+
+    Tweet *tweet = self.arrayOfTweets[indexPath.row];
+    cell.tweet = tweet;
+    
+    cell.user_username.text = [@"@" stringByAppendingString: cell.tweet.user.screenName];
+    cell.user_name.text = tweet.user.name;
+    cell.tweet_date.text = tweet.createdAtString;
+    cell.tweet_text.text = tweet.text;
+    
+    cell.user_profile.image = nil;
+    NSString *URLString = tweet.user.profilePicture;
+    NSURL *url = [NSURL URLWithString:URLString];
+    [cell.user_profile setImageWithURL:url];
+    
+    return cell;
+}
+
 /*
 #pragma mark - Navigation
 
