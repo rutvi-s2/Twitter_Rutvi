@@ -46,6 +46,7 @@
     if(self.tweet.retweeted == YES){
         [self.retweet_button setImage:[UIImage imageNamed:@"retweet-icon-green"] forState:UIControlStateNormal];
         self.tweet.retweetCount += 1;
+        self.tweet.retweetedByUser.name = self.tweet.idStr;
         self.tweet_retweets.text = [NSString stringWithFormat:@"%i", self.tweet.retweetCount];
         [[APIManager shared] retweet:self.tweet completion:^(Tweet *tweet, NSError *error) {
             if(error){

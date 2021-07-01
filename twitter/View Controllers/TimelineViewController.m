@@ -16,7 +16,7 @@
 #import "ComposeViewController.h"
 #import "DetailsViewController.h"
 
-@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TimelineViewController () <ComposeViewControllerDelegate, DetailViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
 @property (strong, nonatomic) NSMutableArray *arrayOfTweets;
@@ -87,7 +87,12 @@
     cell.tweet_date.text = tweet.createdAtString;
     cell.tweet_text.text = tweet.text;
     
-    
+    if(cell.tweet.retweetedByUser.name != NULL){
+        [cell.retweet_top setHidden:NO];
+        [cell.retweet_top setTitle: [cell.tweet.retweetedByUser.name stringByAppendingString:@" retweeted"] forState:UIControlStateNormal];
+    }else{
+        [cell.retweet_top setHidden:YES];
+    }
     cell.user_profile.image = nil;
     NSString *URLString = tweet.user.profilePicture;
     NSURL *url = [NSURL URLWithString:URLString];
@@ -117,6 +122,10 @@
     //[self.tableView reloadData];
     [self getTimeline];
 }
+
+- (void) tweetUpdate:(Tweet *)tweet{
+    [self getTimeline];
+}
 /*
 #pragma mark - Navigation
 
@@ -129,6 +138,11 @@
         UINavigationController const *navigationController = [segue destinationViewController];
         ComposeViewController const *composeController = (ComposeViewController*)navigationController.topViewController;
         composeController.delegate = self;
+        
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.arrayOfTweets[indexPath.row];
+        composeController.tweet = tweet;
     }else{
         UITableViewCell *tappedCell = sender;
         NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
@@ -136,6 +150,7 @@
         
         DetailsViewController const *detailsViewController = [segue destinationViewController];
         detailsViewController.tweet = tweet;
+        detailsViewController.delegate = self;
     }
     
 }

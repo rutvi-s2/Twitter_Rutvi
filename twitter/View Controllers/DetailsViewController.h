@@ -11,6 +11,9 @@
 #import "TimelineViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@protocol DetailViewControllerDelegate
+- (void) tweetUpdate:(Tweet *)tweet;
+@end
 
 @interface DetailsViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIButton *replyButton;
@@ -18,7 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (strong, nonatomic) Tweet *tweet;
 @property (strong, nonatomic) TimelineViewController *specific;
-
+@property (weak, nonatomic) IBOutlet UIButton *retweet_top;
+@property (nonatomic, weak) id<DetailViewControllerDelegate> delegate;
 
 @end
 

@@ -9,6 +9,7 @@
 #import "ComposeViewController.h"
 #import "APIManager.h"
 #import "Tweet.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ComposeViewController ()
 
@@ -18,7 +19,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.userID.text = [@"@" stringByAppendingString: self.tweet.user.screenName];
+    self.userName.text = self.tweet.user.name;
+    
+    //self.profileImage = nil;
+    NSString *URLString = self.tweet.user.profilePicture;
+    NSURL *url = [NSURL URLWithString:URLString];
+    [self.profileImage setImageWithURL:url];
+
 }
 - (IBAction)tweetButton:(id)sender {
     [[APIManager shared] postStatusWithText:self.TweetText.text completion:^(Tweet *tweet, NSError *error) {

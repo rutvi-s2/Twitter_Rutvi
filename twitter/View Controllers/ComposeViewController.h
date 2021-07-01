@@ -16,7 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ComposeViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextView *TweetText;
+@property (weak, nonatomic) IBOutlet UILabel *userID;
 @property (nonatomic, weak) id<ComposeViewControllerDelegate> delegate;
+@property (weak, nonatomic) IBOutlet UILabel *userName;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImage;
+@property (strong, nonatomic) Tweet *tweet;
 @end
 
 NS_ASSUME_NONNULL_END

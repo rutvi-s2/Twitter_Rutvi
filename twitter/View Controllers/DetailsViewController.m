@@ -8,8 +8,16 @@
 
 #import "DetailsViewController.h"
 #import "APIManager.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface DetailsViewController ()
+@property (weak, nonatomic) IBOutlet UIImageView *user_profile;
+@property (weak, nonatomic) IBOutlet UILabel *user_name;
+@property (weak, nonatomic) IBOutlet UILabel *user_username;
+@property (weak, nonatomic) IBOutlet UILabel *tweet_date;
+@property (weak, nonatomic) IBOutlet UILabel *tweet_text;
+@property (weak, nonatomic) IBOutlet UILabel *likes_number;
+@property (weak, nonatomic) IBOutlet UILabel *retweet_number;
 
 @end
 
@@ -18,6 +26,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.user_username.text = [@"@" stringByAppendingString: self.tweet.user.screenName];
+    self.user_name.text = self.tweet.user.name;
+    self.tweet_date.text = self.tweet.createdAtString;
+    self.tweet_text.text = self.tweet.text;
+    self.retweet_number.text = [[NSString stringWithFormat:@"%d", self.tweet.retweetCount] stringByAppendingString:@" RETWEETS"];
+    self.likes_number.text =  [[NSString stringWithFormat:@"%d", self.tweet.favoriteCount] stringByAppendingString:@" FAVORITES"];
+
+    
+    if(self.tweet.retweetedByUser.name != NULL){
+        [self.retweet_top setHidden:NO];
+        [self.retweet_top setTitle: [self.tweet.retweetedByUser.name stringByAppendingString:@" retweeted"] forState:UIControlStateNormal];
+    }else{
+        [self.retweet_top setHidden:YES];
+    }
+    self.user_profile.image = nil;
+    NSString *URLString = self.tweet.user.profilePicture;
+    NSURL *url = [NSURL URLWithString:URLString];
+    [self.user_profile setImageWithURL:url];
+    
     if (self.tweet.favorited == YES){
         [self.likeButton setImage:[UIImage imageNamed:@"favor-icon-red"] forState:UIControlStateNormal];
     }else{
@@ -28,6 +55,7 @@
     }else{
         [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon"] forState:UIControlStateNormal];
     }
+    
 }
 - (IBAction)didTapLike:(id)sender {
     NSLog(@"%@", @"hellllllo");
@@ -42,6 +70,7 @@
             }
             else{
                 NSLog(@"Successfully favorited the following Tweet: %@", self.tweet.text);
+                [self.delegate tweetUpdate: self.tweet];
             }
         }];
     }else{
@@ -53,6 +82,7 @@
             }
             else{
                 NSLog(@"Successfully unfavorited the following Tweet: %@", self.tweet.text);
+                [self.delegate tweetUpdate: self.tweet];
             }
         }];
     }
@@ -62,12 +92,14 @@
     if(self.tweet.retweeted == YES){
         [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon-green"] forState:UIControlStateNormal];
         self.tweet.retweetCount += 1;
+        self.tweet.retweetedByUser.name = self.tweet.idStr;
         [[APIManager shared] retweet:self.tweet completion:^(Tweet *tweet, NSError *error) {
             if(error){
                  NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
             }
             else{
                 NSLog(@"Successfully retweeted the following Tweet: %@", self.tweet.text);
+                [self.delegate tweetUpdate: self.tweet];
                 
             }
         }];
@@ -80,6 +112,7 @@
             }
             else{
                 NSLog(@"Successfully unretweeting the following Tweet: %@", self.tweet.text);
+                [self.delegate tweetUpdate: self.tweet];
             }
         }];
     }
