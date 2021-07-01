@@ -28,7 +28,7 @@
     // Do any additional setup after loading the view.
     self.user_username.text = [@"@" stringByAppendingString: self.tweet.user.screenName];
     self.user_name.text = self.tweet.user.name;
-    self.tweet_date.text = self.tweet.createdAtString;
+    self.tweet_date.text = self.tweet.createdAtStringSpecific;
     self.tweet_text.text = self.tweet.text;
     self.retweet_number.text = [[NSString stringWithFormat:@"%d", self.tweet.retweetCount] stringByAppendingString:@" RETWEETS"];
     self.likes_number.text =  [[NSString stringWithFormat:@"%d", self.tweet.favoriteCount] stringByAppendingString:@" FAVORITES"];

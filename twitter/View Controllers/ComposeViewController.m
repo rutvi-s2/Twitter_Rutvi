@@ -10,6 +10,7 @@
 #import "APIManager.h"
 #import "Tweet.h"
 #import "UIImageView+AFNetworking.h"
+#import <UITextView+Placeholder/UITextView+Placeholder.h>
 
 @interface ComposeViewController ()
 
@@ -19,6 +20,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    self.TweetText.placeholder = @"Type Something Here...";
+    self.TweetText.placeholderColor = [UIColor lightGrayColor];
+    self.TweetText.layer.borderColor = [[UIColor grayColor] CGColor];
+    self.TweetText.layer.borderWidth = 1.0;
+    self.TweetText.layer.cornerRadius = 8;
     
     self.userID.text = [@"@" stringByAppendingString: self.tweet.user.screenName];
     self.userName.text = self.tweet.user.name;

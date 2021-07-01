@@ -27,6 +27,7 @@
             
             //change tweet to original tweet
             dictionary = originalTweet;
+            NSLog(@"%@", dictionary);
         }
         self.idStr = dictionary[@"id_str"];
         self.text = dictionary[@"full_text"];
@@ -43,11 +44,13 @@
         formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
         //convert string to date
         NSDate *date = [formatter dateFromString:createdAtOriginalString];
+        
         //configure output format
         formatter.dateStyle = NSDateFormatterShortStyle;
-        formatter.timeStyle = NSDateFormatterNoStyle;
+        formatter.timeStyle = NSDateFormatterShortStyle;
         //convert date to string
         self.createdAtString = [date shortTimeAgoSinceNow];
+        self.createdAtStringSpecific = [formatter stringFromDate:date];
     }
     return self;
 }
