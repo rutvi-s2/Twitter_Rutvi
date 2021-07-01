@@ -1,12 +1,12 @@
 //
-//  TimelineViewController.m
+//  UserViewController.m
 //  twitter
 //
 //  Created by emersonmalca on 5/28/18.
 //  Copyright © 2018 Emerson Malca. All rights reserved.
 //
 
-#import "TimelineViewController.h"
+#import "UserViewController.h"
 #import "APIManager.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
@@ -16,78 +16,66 @@
 #import "ComposeViewController.h"
 #import "DetailsViewController.h"
 
-@interface TimelineViewController () <ComposeViewControllerDelegate, DetailViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface UserViewController () <ComposeViewControllerDelegate, DetailViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
-@property (strong, nonatomic) NSMutableArray *arrayOfTweets;
 @property (strong, nonatomic) NSMutableArray *userArrayOfTweets;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
-@implementation TimelineViewController
+@implementation UserViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.followingNumber = 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self getTimeline];
+    [self getUserTimeline];
 
     self.refreshControl = [[UIRefreshControl alloc] init];
-
+    
     [self.refreshControl addTarget:self action:@selector(getTimeline) forControlEvents:UIControlEventValueChanged];
-
+    
     [self.tableView insertSubview:self.refreshControl atIndex: 0];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
--(void)getTimeline{
+-(void)getUserTimeline{
     // Get timeline
-    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getProfileTimeline:^(NSArray *tweets, NSError *error) {
         if (tweets) {
-            self.arrayOfTweets = (NSMutableArray *)tweets;
+            self.userArrayOfTweets = (NSMutableArray *)tweets;
 //            NSLog(@"%lu", self.arrayOfTweets.count);
             NSLog(@"%lu", tweets.count);
-            NSLog(@"😎😎😎 Successfully loaded home timeline");
-//            for (Tweet *dictionary in tweets) {
-//                NSString *text = dictionary.text;
-//                NSLog(@"%@", text);
-//            }
+            NSLog(@"😎😎😎 Successfully loaded user timeline");
             [self.tableView reloadData];
         } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            NSLog(@"😫😫😫 Error getting user timeline: %@", error.localizedDescription);
         }
         [self.refreshControl endRefreshing];
     }];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)onTap:(id)sender {
-    AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    appDelegate.window.rootViewController = loginViewController;
-    [[APIManager shared] logout];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"%lu", self.arrayOfTweets.count);
-    return self.arrayOfTweets.count;
+    NSLog(@"%lu", self.userArrayOfTweets.count);
+    return self.userArrayOfTweets.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
-    Tweet *tweet = self.arrayOfTweets[indexPath.row];
+    Tweet *tweet = self.userArrayOfTweets[indexPath.row];
     cell.tweet = tweet;
-
+    
     cell.user_username.text = [@"@" stringByAppendingString: cell.tweet.user.screenName];
     cell.user_name.text = tweet.user.name;
     cell.tweet_date.text = tweet.createdAtString;
     cell.tweet_text.text = tweet.text;
-
+    
     if(cell.tweet.retweetedByUser.name != NULL){
         [cell.retweet_top setHidden:NO];
         [cell.retweet_top setTitle: [cell.tweet.retweetedByUser.name stringByAppendingString:@" retweeted"] forState:UIControlStateNormal];
@@ -98,7 +86,7 @@
     NSString *URLString = tweet.user.profilePicture;
     NSURL *url = [NSURL URLWithString:URLString];
     [cell.user_profile setImageWithURL:url];
-
+    
     if (cell.tweet.favorited == YES){
         [cell.favor_button setImage:[UIImage imageNamed:@"favor-icon-red"] forState:UIControlStateNormal];
     }else{
@@ -109,7 +97,7 @@
     }else{
         [cell.retweet_button setImage:[UIImage imageNamed:@"retweet-icon"] forState:UIControlStateNormal];
     }
-
+    
     cell.tweet_replies.text = [NSString stringWithFormat:@"%d", tweet.replyCount];
     cell.tweet_likes.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
     cell.tweet_retweets.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
@@ -118,14 +106,14 @@
 }
 
 - (void) didTweet:(Tweet *)tweet{
-    [self.arrayOfTweets addObject:tweet];
+    [self.userArrayOfTweets addObject:tweet];
     NSLog(@"%@", @"added");
     //[self.tableView reloadData];
-    [self getTimeline];
+    [self getUserTimeline];
 }
 
 - (void) tweetUpdate:(Tweet *)tweet{
-    [self getTimeline];
+    [self getUserTimeline];
 }
 /*
 #pragma mark - Navigation
@@ -139,21 +127,21 @@
         UINavigationController const *navigationController = [segue destinationViewController];
         ComposeViewController const *composeController = (ComposeViewController*)navigationController.topViewController;
         composeController.delegate = self;
-
+        
         UITableViewCell *tappedCell = sender;
         NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
-        Tweet *tweet = self.arrayOfTweets[indexPath.row];
+        Tweet *tweet = self.userArrayOfTweets[indexPath.row];
         composeController.tweet = tweet;
     }else{
         UITableViewCell *tappedCell = sender;
         NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
-        Tweet *tweet = self.arrayOfTweets[indexPath.row];
-
+        Tweet *tweet = self.userArrayOfTweets[indexPath.row];
+        
         DetailsViewController const *detailsViewController = [segue destinationViewController];
         detailsViewController.tweet = tweet;
         detailsViewController.delegate = self;
     }
-
+    
 }
 
 

@@ -23,7 +23,9 @@
         NSDictionary *originalTweet = dictionary[@"retweeted_status"];
         if (originalTweet != nil){
             NSDictionary *userDictionary = dictionary [@"user"];
+//            NSDictionary *userMentionDictionary = dictionary [@"user_mentions"];
             self.retweetedByUser = [ [User alloc] initWithDictionary:userDictionary];
+//            self.mentionedByUser = [ [User alloc] initWithDictionary:userMentionDictionary];
             
             //change tweet to original tweet
             dictionary = originalTweet;
@@ -62,6 +64,15 @@
         [tweets addObject: tweet];
     }
     return tweets;
+}
+
++ (NSMutableArray *)userTweetsWithArray:(NSArray *)dictionaries{
+    NSMutableArray *userTweets = [NSMutableArray array];
+    for(NSDictionary *dictionary in dictionaries){
+        Tweet *tweet = [[Tweet alloc] initWithDictionary:dictionary];
+        [userTweets addObject: tweet];
+    }
+    return userTweets;
 }
 
 @end

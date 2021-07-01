@@ -67,6 +67,24 @@ static NSString * const baseURLString = @"https://api.twitter.com";
     }];
 }
 
+- (void)getProfileTimeline:(void(^)(NSArray *tweets, NSError *error))completion {
+    NSDictionary *parameters = @{@"tweet_mode":@"extended"};
+    
+    //replaced above code with following
+    [self GET:@"1.1/statuses/user_timeline.json"
+       parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
+           // success
+           NSMutableArray *user_tweets  = [Tweet userTweetsWithArray:tweetDictionaries];
+           completion(user_tweets, nil);
+       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           // there was a problem
+           completion(nil, error);
+    }];
+}
+
+///1.1/followers/list.json
+
+
 - (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion{
     NSString const *urlString = @"1.1/statuses/update.json";
     NSDictionary *parameters = @{@"status": text};
