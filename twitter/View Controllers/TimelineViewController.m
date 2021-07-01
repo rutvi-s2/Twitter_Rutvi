@@ -14,8 +14,10 @@
 #import "TweetCell.h"
 #import "UIImageView+AFNetworking.h"
 #import "ComposeViewController.h"
+#import "DetailsViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
 @property (strong, nonatomic) NSMutableArray *arrayOfTweets;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -62,6 +64,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 - (IBAction)onTap:(id)sender {
     AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -76,7 +79,6 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
-
     Tweet *tweet = self.arrayOfTweets[indexPath.row];
     cell.tweet = tweet;
     
@@ -105,7 +107,7 @@
     cell.tweet_replies.text = [NSString stringWithFormat:@"%d", tweet.replyCount];
     cell.tweet_likes.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
     cell.tweet_retweets.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
-    
+
     return cell;
 }
 
@@ -123,9 +125,19 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 //     Get the new view controller using [segue destinationViewController].
 //     Pass the selected object to the new view controller.
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    if([segue.identifier isEqualToString:@"composeTweet"]){
+        UINavigationController const *navigationController = [segue destinationViewController];
+        ComposeViewController const *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    }else{
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.arrayOfTweets[indexPath.row];
+        
+        DetailsViewController const *detailsViewController = [segue destinationViewController];
+        detailsViewController.tweet = tweet;
+    }
+    
 }
 
 

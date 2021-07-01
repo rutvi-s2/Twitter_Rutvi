@@ -28,14 +28,14 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 
 - (instancetype)init {
     
-    NSURL *baseURL = [NSURL URLWithString:baseURLString];
+    NSURL const *baseURL = [NSURL URLWithString:baseURLString];
     
     // TODO: fix code below to pull API Keys from your new Keys.plist file
     
-    NSString *path = [ [NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];
-    NSString *key = [dict objectForKey:@"consumer_Key"];
-    NSString *secret = [dict objectForKey:@"consumer_Secret"];
+    NSString const *path = [ [NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"];
+    NSDictionary const *dict = [NSDictionary dictionaryWithContentsOfFile:path];
+    NSString const *key = [dict objectForKey:@"consumer_Key"];
+    NSString const *secret = [dict objectForKey:@"consumer_Secret"];
     
     // Check for launch arguments override
     if ([[NSUserDefaults standardUserDefaults] stringForKey:@"consumer-key"]) {
@@ -68,7 +68,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 }
 
 - (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion{
-    NSString *urlString = @"1.1/statuses/update.json";
+    NSString const *urlString = @"1.1/statuses/update.json";
     NSDictionary *parameters = @{@"status": text};
     
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
@@ -81,7 +81,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 
 - (void)favorite:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion{
 
-    NSString *urlString = @"1.1/favorites/create.json";
+    NSString const *urlString = @"1.1/favorites/create.json";
     NSDictionary *parameters = @{@"id": tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
@@ -92,7 +92,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 }
 - (void)unfavorite:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion{
 
-    NSString *urlString = @"1.1/favorites/destroy.json";
+    NSString const *urlString = @"1.1/favorites/destroy.json";
     NSDictionary *parameters = @{@"id": tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
@@ -103,7 +103,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 }
 - (void)retweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion{
 
-    NSString *urlString = [[@"1.1/statuses/retweet/" stringByAppendingString:tweet.idStr] stringByAppendingString:@".json"];
+    NSString const *urlString = [[@"1.1/statuses/retweet/" stringByAppendingString:tweet.idStr] stringByAppendingString:@".json"];
     NSDictionary *parameters = @{@"id": tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
@@ -114,7 +114,7 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 }
 - (void)unretweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion{
 
-    NSString *urlString = [[@"1.1/statuses/unretweet/" stringByAppendingString:tweet.idStr] stringByAppendingString:@".json"];
+    NSString const *urlString = [[@"1.1/statuses/unretweet/" stringByAppendingString:tweet.idStr] stringByAppendingString:@".json"];
     NSDictionary *parameters = @{@"id": tweet.idStr};
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
