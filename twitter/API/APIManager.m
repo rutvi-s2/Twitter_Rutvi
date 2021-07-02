@@ -81,8 +81,20 @@ static NSString * const baseURLString = @"https://api.twitter.com";
            completion(nil, error);
     }];
 }
-
-///1.1/followers/list.json
+- (void)getMoreTweetsWithCompletion:(NSString *)maxID completion: (void(^)(NSArray *tweets, NSError *error))completion{
+    NSDictionary *parameters = @{@"tweet_mode":@"extended", @"max_id": maxID};
+    
+    //replaced above code with following
+    [self GET:@"1.1/statuses/home_timeline.json"
+       parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
+           // success
+           NSMutableArray *tweets  = [Tweet tweetsWithArray:tweetDictionaries];
+           completion(tweets, nil);
+       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           // there was a problem
+           completion(nil, error);
+    }];
+}
 
 
 - (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion{

@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *fullProfileImage;
-@property (weak, nonatomic) IBOutlet UILabel *tweetNumber;
 @property (weak, nonatomic) IBOutlet UILabel *followerNumber;
 @property (weak, nonatomic) IBOutlet UILabel *followingNumber;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 
 @end
 

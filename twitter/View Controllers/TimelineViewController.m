@@ -23,6 +23,7 @@
 @property (strong, nonatomic) NSMutableArray *userArrayOfTweets;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic) BOOL moreDataLeft;
 @end
 
 @implementation TimelineViewController
@@ -31,6 +32,7 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.moreDataLeft = false;
     [self getTimeline];
 
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -49,15 +51,12 @@
 //            NSLog(@"%lu", self.arrayOfTweets.count);
             NSLog(@"%lu", tweets.count);
             NSLog(@"😎😎😎 Successfully loaded home timeline");
-//            for (Tweet *dictionary in tweets) {
-//                NSString *text = dictionary.text;
-//                NSLog(@"%@", text);
-//            }
             [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
-        [self.refreshControl endRefreshing];
+        
     }];
 }
 
@@ -124,8 +123,40 @@
     [self getTimeline];
 }
 
+- (void) loadMoreTweets{
+    Tweet *lastTweet = self.arrayOfTweets[self.arrayOfTweets.count - 1];
+    NSString *maxId = lastTweet.idStr;
+    [[APIManager shared] getMoreTweetsWithCompletion:maxId completion:^(NSArray *tweets, NSError *error) {
+        if (tweets) {
+            [self.arrayOfTweets addObjectsFromArray:tweets];
+
+            NSLog(@"%lu", tweets.count);
+            NSLog(@"😎😎😎 Successfully loaded home timeline");
+
+            [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
+            self.moreDataLeft = false;
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+    }];
+}
+
 - (void) tweetUpdate:(Tweet *)tweet{
     [self getTimeline];
+}
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView{
+    if(!self.moreDataLeft){
+        int height = self.tableView.contentSize.height;
+        int threshold = height - self.tableView.bounds.size.height;
+        
+        
+        if(scrollView.contentOffset.y > threshold &&(self.tableView.isDragging)){
+            self.moreDataLeft = true;
+            [self loadMoreTweets];
+        }
+    }
 }
 /*
 #pragma mark - Navigation

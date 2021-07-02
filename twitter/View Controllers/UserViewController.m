@@ -27,14 +27,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.followingNumber = 
+    self.followerNumber.layer.borderColor = [UIColor grayColor].CGColor;
+    self.followingNumber.layer.borderColor = [UIColor grayColor].CGColor;
+    self.descriptionLabel.layer.borderColor = [UIColor grayColor].CGColor;
+    
+    self.followerNumber.layer.borderWidth = 0.5;
+    self.followingNumber.layer.borderWidth = 0.5;
+    self.descriptionLabel.layer.borderWidth = 0.5;
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self getUserTimeline];
 
     self.refreshControl = [[UIRefreshControl alloc] init];
     
-    [self.refreshControl addTarget:self action:@selector(getTimeline) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(getUserTimeline) forControlEvents:UIControlEventValueChanged];
     
     [self.tableView insertSubview:self.refreshControl atIndex: 0];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -76,6 +83,10 @@
     cell.tweet_date.text = tweet.createdAtString;
     cell.tweet_text.text = tweet.text;
     
+    self.followerNumber.text = [[NSString stringWithFormat:@"%d", tweet.user.followers] stringByAppendingString:@" followers"];
+    self.followingNumber.text = [[NSString stringWithFormat:@"%d", tweet.user.following]stringByAppendingString:@" following"];
+    self.descriptionLabel.text = tweet.user.descriptionTweet;
+    
     if(cell.tweet.retweetedByUser.name != NULL){
         [cell.retweet_top setHidden:NO];
         [cell.retweet_top setTitle: [cell.tweet.retweetedByUser.name stringByAppendingString:@" retweeted"] forState:UIControlStateNormal];
@@ -86,6 +97,10 @@
     NSString *URLString = tweet.user.profilePicture;
     NSURL *url = [NSURL URLWithString:URLString];
     [cell.user_profile setImageWithURL:url];
+    
+    NSString *URLBackgroundString = tweet.user.backgroundPicture;
+    NSURL *backurl = [NSURL URLWithString:URLBackgroundString];
+    [self.fullProfileImage setImageWithURL:backurl];
     
     if (cell.tweet.favorited == YES){
         [cell.favor_button setImage:[UIImage imageNamed:@"favor-icon-red"] forState:UIControlStateNormal];
