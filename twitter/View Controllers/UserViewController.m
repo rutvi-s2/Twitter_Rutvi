@@ -29,11 +29,9 @@
     [super viewDidLoad];
     self.followerNumber.layer.borderColor = [UIColor grayColor].CGColor;
     self.followingNumber.layer.borderColor = [UIColor grayColor].CGColor;
-    self.descriptionLabel.layer.borderColor = [UIColor grayColor].CGColor;
     
     self.followerNumber.layer.borderWidth = 0.5;
     self.followingNumber.layer.borderWidth = 0.5;
-    self.descriptionLabel.layer.borderWidth = 0.5;
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -52,9 +50,6 @@
     [[APIManager shared] getProfileTimeline:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             self.userArrayOfTweets = (NSMutableArray *)tweets;
-//            NSLog(@"%lu", self.arrayOfTweets.count);
-            NSLog(@"%lu", tweets.count);
-            NSLog(@"😎😎😎 Successfully loaded user timeline");
             [self.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting user timeline: %@", error.localizedDescription);
@@ -70,7 +65,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"%lu", self.userArrayOfTweets.count);
     return self.userArrayOfTweets.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -122,8 +116,6 @@
 
 - (void) didTweet:(Tweet *)tweet{
     [self.userArrayOfTweets addObject:tweet];
-    NSLog(@"%@", @"added");
-    //[self.tableView reloadData];
     [self getUserTimeline];
 }
 
@@ -139,20 +131,20 @@
 //     Get the new view controller using [segue destinationViewController].
 //     Pass the selected object to the new view controller.
     if([segue.identifier isEqualToString:@"composeTweet"]){
-        UINavigationController const *navigationController = [segue destinationViewController];
-        ComposeViewController const *composeController = (ComposeViewController*)navigationController.topViewController;
+        UINavigationController  *navigationController = [segue destinationViewController];
+        ComposeViewController  *composeController = (ComposeViewController*)navigationController.topViewController;
         composeController.delegate = self;
         
         UITableViewCell *tappedCell = sender;
-        NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
+        NSIndexPath  *indexPath = [self.tableView indexPathForCell:tappedCell];
         Tweet *tweet = self.userArrayOfTweets[indexPath.row];
         composeController.tweet = tweet;
     }else{
         UITableViewCell *tappedCell = sender;
-        NSIndexPath const *indexPath = [self.tableView indexPathForCell:tappedCell];
+        NSIndexPath  *indexPath = [self.tableView indexPathForCell:tappedCell];
         Tweet *tweet = self.userArrayOfTweets[indexPath.row];
         
-        DetailsViewController const *detailsViewController = [segue destinationViewController];
+        DetailsViewController *detailsViewController = [segue destinationViewController];
         detailsViewController.tweet = tweet;
         detailsViewController.delegate = self;
     }

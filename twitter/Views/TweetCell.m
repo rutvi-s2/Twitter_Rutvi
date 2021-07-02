@@ -23,7 +23,6 @@
                  NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
             }
             else{
-                NSLog(@"Successfully favorited the following Tweet: %@", self.tweet.text);
             }
         }];
     }else{
@@ -66,7 +65,6 @@
                  NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
             }
             else{
-                NSLog(@"Successfully unretweeting the following Tweet: %@", self.tweet.text);
             }
         }];
     }

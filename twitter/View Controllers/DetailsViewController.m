@@ -58,8 +58,6 @@
     
 }
 - (IBAction)didTapLike:(id)sender {
-    NSLog(@"%@", @"hellllllo");
-    NSLog(@"%@", self.tweet.text);
     self.tweet.favorited = !self.tweet.favorited;
     if(self.tweet.favorited == YES){
         [self.likeButton setImage:[UIImage imageNamed:@"favor-icon-red"] forState:UIControlStateNormal];
@@ -69,7 +67,6 @@
                  NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
             }
             else{
-                NSLog(@"Successfully favorited the following Tweet: %@", self.tweet.text);
                 [self.delegate tweetUpdate: self.tweet];
             }
         }];
@@ -81,7 +78,6 @@
                  NSLog(@"Error unfavoriting tweet: %@", error.localizedDescription);
             }
             else{
-                NSLog(@"Successfully unfavorited the following Tweet: %@", self.tweet.text);
                 [self.delegate tweetUpdate: self.tweet];
             }
         }];
@@ -98,7 +94,6 @@
                  NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
             }
             else{
-                NSLog(@"Successfully retweeted the following Tweet: %@", self.tweet.text);
                 [self.delegate tweetUpdate: self.tweet];
                 
             }
@@ -111,7 +106,6 @@
                  NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
             }
             else{
-                NSLog(@"Successfully unretweeting the following Tweet: %@", self.tweet.text);
                 [self.delegate tweetUpdate: self.tweet];
             }
         }];

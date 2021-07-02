@@ -31,6 +31,7 @@
             [self performSegueWithIdentifier:@"loginSegue" sender:nil];
         } else {
             NSLog(@"%@", error.localizedDescription);
+            
         }
     }];
 }
