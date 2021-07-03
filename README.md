@@ -52,7 +52,7 @@ Here's a walkthrough of implemented user stories:
 ![](twitterTwo.gif)
 ![](TwitterThree.gif)
 ![](TwitterFour.gif)
-![](twitterFive.gif)
+![](TwitterFive.gif)
 ![](TwitterSix.gif)
 ![](TwitterSeven.gif)
 
