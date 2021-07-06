@@ -49,11 +49,17 @@ Please list two areas of the assignment you'd like to **discuss further with you
 Here's a walkthrough of implemented user stories:
 
 ![](twitterOne.gif)
+
 ![](twitterTwo.gif)
+
 ![](TwitterThree.gif)
+
 ![](TwitterFour.gif)
+
 ![](twitterFive2.gif)
+
 ![](TwitterSix.gif)
+
 ![](TwitterSeven.gif)
 
 GIF created with [Kap](https://getkap.co/).
